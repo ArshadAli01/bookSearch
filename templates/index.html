@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Recommendation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Book Recommendation System</h1>
+    
+    <form method="POST" action="/recommend">
+        <label for="option">Choose an option:</label>
+        <select name="option" id="option" required>
+            <option value="">Select an option</option>
+            <option value="year">By Year</option>
+            <option value="genre">By Genre</option>
+            <option value="author">By Author</option>
+            <option value="random">Random Generation</option>
+        </select>
+
+        <!-- Input for Year -->
+        <div id="year_input" style="display: none;">
+            <label for="year">Enter Year:</label>
+            <input type="number" name="year" id="year" placeholder="e.g. 1947">
+        </div>
+
+        <!-- Input for Genre -->
+        <div id="genre_input" style="display: none;">
+            <label for="genre">Enter Genre:</label>
+            <input type="text" name="genre" id="genre" placeholder="e.g. Sci-Fi">
+        </div>
+
+        <!-- Input for Author -->
+        <div id="author_input" style="display: none;">
+            <label for="author">Enter Author:</label>
+            <input type="text" name="author" id="author" placeholder="e.g. William Shakespeare">
+        </div>
+
+        <button type="submit">Recommend Books</button>
+    </form>
+
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
+
+    {% if books %}
+        <h2>Recommended Books:</h2>
+        <ul>
+        {% for book in books %}
+            <li>{{ book['Book Title'] }} by {{ book['Author Name'] }} ({{ book['Year of Publication'] }}) - {{ book['Genre'] }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+    <!-- JavaScript to show/hide input fields -->
+    <script>
+        const optionSelect = document.getElementById('option');
+        const yearInput = document.getElementById('year_input');
+        const genreInput = document.getElementById('genre_input');
+        const authorInput = document.getElementById('author_input');
+
+        // Initially hide all inputs
+        yearInput.style.display = 'none';
+        genreInput.style.display = 'none';
+        authorInput.style.display = 'none';
+
+        // Show/hide inputs based on selected option
+        optionSelect.addEventListener('change', function() {
+            yearInput.style.display = 'none';
+            genreInput.style.display = 'none';
+            authorInput.style.display = 'none';
+
+            if (this.value === 'year') {
+                yearInput.style.display = 'block';
+            } else if (this.value === 'genre') {
+                genreInput.style.display = 'block';
+            } else if (this.value === 'author') {
+                authorInput.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
